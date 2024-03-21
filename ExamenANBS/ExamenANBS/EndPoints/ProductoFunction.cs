@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System.Net;
 
 namespace ExamenANBS.EndPoints
@@ -21,6 +23,12 @@ namespace ExamenANBS.EndPoints
         }
 
         [Function("InsertarProducto")]
+        [OpenApiOperation("Listarspec", "InsertarProducto", Description = "Sirve para insertar Producto")]
+        [OpenApiRequestBody("application/json", typeof(Producto),
+           Description = "Producto modelo")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json",
+            bodyType: typeof(Producto),
+            Description = "Mostrara  al Producto insertado")]
         public async Task<HttpResponseData> InsertarProducto([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "insertarproducto")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -48,6 +56,10 @@ namespace ExamenANBS.EndPoints
             }
         }
         [Function("ListarProducto")]
+        [OpenApiOperation("Listarspec", "ListarProducto", Description = "Sirve para listar todas las Producto")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json",
+            bodyType: typeof(List<Producto>),
+            Description = "Mostrara una lista de Producto")]
         public async Task<HttpResponseData> ListarProducto([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "listarproducto")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -65,6 +77,13 @@ namespace ExamenANBS.EndPoints
             }
         }
         [Function("EliminarProducto")]
+        [OpenApiOperation("Listarspec", "EliminarProducto", Description = "Sirve para eliminar  Producto")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json",
+            bodyType: typeof(void),
+            Description = " eliminar Producto")]
+        [OpenApiParameter(name: "partitionkey", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "El partitionkey del Producto")]
+        [OpenApiParameter(name: "rowkey", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "El rowkey del Producto")]
+
         public async Task<HttpResponseData> EliminarProducto([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "eliminarproducto")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -92,6 +111,11 @@ namespace ExamenANBS.EndPoints
             }
         }
         [Function("ObtenerProducto")]
+        [OpenApiOperation("Listarspec", "ObtenerProducto", Description = "Sirve para obtener un  Producto")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json",
+            bodyType: typeof(Producto),
+            Description = "Mostrara una lista de Producto")]
+        [OpenApiParameter(name: "idProducto", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "El RowKey del idProducto")]
         public async Task<HttpResponseData> ObtenerProducto([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "obtenerproducto")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -110,6 +134,12 @@ namespace ExamenANBS.EndPoints
             }
         }
         [Function("EditarProducto")]
+        [OpenApiOperation("Listarspec", "EditarProducto", Description = "Sirve para editar Producto")]
+        [OpenApiRequestBody("application/json", typeof(Producto),
+           Description = "Producto modelo")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json",
+            bodyType: typeof(Producto),
+            Description = "Mostrara  al Producto editado")]
         public async Task<HttpResponseData> EditarProducto([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "editarproducto")] HttpRequestData req)
         {
             HttpResponseData respuesta;
