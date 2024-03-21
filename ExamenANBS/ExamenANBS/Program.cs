@@ -1,3 +1,5 @@
+using ExamenANBS.Contratos;
+using ExamenANBS.Implementacion;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +10,7 @@ var host = new HostBuilder()
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
+        services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
     })
     .Build();
 
